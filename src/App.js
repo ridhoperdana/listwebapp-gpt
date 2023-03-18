@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, 
+  TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { orderBy } from 'lodash';
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const theme = createTheme({
   palette: {
@@ -37,11 +39,17 @@ function App() {
   };
 
   const renderSortIcon = () => {
-    if (sortDirection === 'asc') {
-      return <ArrowDropDown />;
-    } else {
-      return <ArrowDropUp />;
+    if (sortDirection !== 'asc' && sortDirection !== 'desc') {
+      return null;
     }
+  
+    const IconComponent = sortDirection === 'desc' ? ArrowDropUpIcon : ArrowDropDownIcon;
+  
+    return (
+      <Box sx={{ display: 'flex'}}>
+        <IconComponent sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} />
+      </Box>
+    );
   };
 
   return (
@@ -53,14 +61,18 @@ function App() {
               <TableRow>
                 <TableCell sx={{ color: 'white', cursor: 'pointer' }} onClick={handleSort}>
                   <Box display="flex" alignItems="center">
-                    ID
+                    <Typography variant="subtitle1" fontWeight="bold">ID</Typography>
                     <IconButton onClick={handleSort} size="small">
                       {renderSortIcon()}
                     </IconButton>
                   </Box>
                 </TableCell>
-                <TableCell sx={{ color: 'white' }}>Title</TableCell>
-                <TableCell sx={{ color: 'white' }}>Body</TableCell>
+                <TableCell sx={{ color: 'white' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">Title</Typography>
+                </TableCell>
+                <TableCell sx={{ color: 'white' }}>
+                  <Typography variant="subtitle1" fontWeight="bold">Status</Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
