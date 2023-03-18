@@ -1,6 +1,5 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# listwebapp-gpt
+An app that list all webapp with its port. Build with the help of ChatGPT
 
 ## Available Scripts
 
