@@ -39,17 +39,11 @@ function App() {
   };
 
   const renderSortIcon = () => {
-    if (sortDirection !== 'asc' && sortDirection !== 'desc') {
-      return null;
+    if (sortDirection === 'asc') {
+      return <ArrowDropDownIcon sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} />;
+    } else {
+      return <ArrowDropUpIcon sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} />;
     }
-  
-    const IconComponent = sortDirection === 'desc' ? ArrowDropUpIcon : ArrowDropDownIcon;
-  
-    return (
-      <Box sx={{ display: 'flex'}}>
-        <IconComponent sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }} />
-      </Box>
-    );
   };
 
   return (
