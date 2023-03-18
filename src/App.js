@@ -48,7 +48,13 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ padding: '30px' }}>
+      <Box sx={{
+        padding: '100px',
+        borderRadius: '20px',
+        // I dont know why this doesn't work, the small shadow already exists without belo code. 
+        // chatGPT compatibility?
+        boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.2), 0px 6px 6px rgba(0, 0, 0, 0.2)',
+      }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead sx={{ backgroundColor: theme.palette.primary.main }}>
