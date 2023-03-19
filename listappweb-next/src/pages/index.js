@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { exec } from 'child_process';
-import { Table, TableBody, TableCell, TableContainer,
+import axios from 'axios';
+import { Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { orderBy } from 'lodash';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-  },
-});
+import { theme } from './theme';
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -22,30 +15,11 @@ export default function Home() {
   const [sortDirection, setSortDirection] = useState('asc');
 
   useEffect(() => {
-    const fetchData = () => {
-      exec('ss -tulpn | grep LISTEN', (err, stdout, stderr) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        const lines = stdout.trim().split('\n');
-        const result = lines.map((line) => {
-          const [proto, recvq, sendq, local, remote, state] = line.trim().split(/\s+/);
-          const [localIp, localPort] = local.split(':');
-          const [remoteIp, remotePort] = remote.split(':');
-          return {
-            proto,
-            recvq,
-            sendq,
-            localIp,
-            localPort,
-            remoteIp,
-            remotePort,
-            state,
-          };
-        });
-        setData(result);
-      });
+    const fetchData = async () => {
+      const result = await axios(
+        'https://jsonplaceholder.typicode.com/posts'
+      );
+      setData(result.data);
     };
     fetchData();
   }, []);
@@ -55,7 +29,7 @@ export default function Home() {
     const sorted = orderBy(data, 'id', nextSortDirection);
     setSortedData(sorted);
     setSortDirection(nextSortDirection);
-  };  
+  };
 
   const renderSortIcon = () => {
     if (sortDirection === 'asc') {
@@ -95,13 +69,13 @@ export default function Home() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((item) => (
-                <TableRow key={item}>
+              {(sortedData.length > 0 ? sortedData : data).map((item) => (
+                <TableRow key={item.id}>
                   <TableCell component="th" scope="row">
-                    {item}
+                    {item.id}
                   </TableCell>
-                  <TableCell>Some title</TableCell>
-                  <TableCell>Some status</TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.body}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
