@@ -25,7 +25,7 @@ export async function getAppData() {
 
 export async function getAppDataFromTerminal() {
     return new Promise((resolve, reject) => {
-        const child = exec('lsof -i | grep "LISTEN"');
+        const child = exec('ss -tulpn | grep LISTEN');
         let buffer = '';
 
         child.stdout.on('data', (data) => {
