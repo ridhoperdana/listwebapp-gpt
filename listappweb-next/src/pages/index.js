@@ -1,23 +1,41 @@
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, createTheme, TextField } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, 
   TableHead, TableRow, Paper, IconButton, Typography } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { orderBy } from 'lodash';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { theme } from './theme';
-import { getAppData } from './getapp';
+import { getAppData } from '../api/getapp';
+
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+  },
+});
 
 export default function Home({ result }) {
   const [data, setData] = useState(result);
   const [sortDirection, setSortDirection] = useState('asc');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleSort = () => {
     const nextSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     const sorted = orderBy(data, 'id', nextSortDirection);
     setData(sorted);
     setSortDirection(nextSortDirection);
+  };
+
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    const filteredData = result.filter((item) => {
+      return item.line.toLowerCase().includes(value);
+    });
+    setData(filteredData);
   };
 
   const renderSortIcon = () => {
@@ -48,6 +66,42 @@ export default function Home({ result }) {
                 </TableCell>
                 <TableCell sx={{ color: 'white' }}>
                   <Typography variant="subtitle1" fontWeight="bold">Process</Typography>
+                </TableCell>
+                <TableCell sx={{ color: 'white' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <TextField
+                      id="process-search"
+                      label="Search"
+                      size="small"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      inputProps={{
+                        style: {
+                          color: 'white',
+                        },
+                      }}
+                      sx={{
+                        '& label.Mui-focused': {
+                          color: 'white',
+                        },
+                        '& .MuiInput-underline:after': {
+                          borderBottomColor: 'white',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: 'white',
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'white',
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: 'white',
+                          },
+                        }
+                      }}
+                    />
+                  </Box>
                 </TableCell>
               </TableRow>
             </TableHead>
